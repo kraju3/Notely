@@ -12,7 +12,7 @@ let notes = [
 const typeDefs = gql`
 type Query{
     notes:[Note!]!
-    note(id:ID!):Note!
+    note(id:String!):Note!
 
 }
 type Note {
@@ -22,8 +22,9 @@ type Note {
       
 }
 type Mutation {
-    CreateNote(content:String!):Note!
+    CreateNote(content:String!,author:String!):Note!
     DeleteNote(author:String!):Note!
+    UpdateNote(content:String!,author:String!):Note!
 }
 
 `
@@ -36,8 +37,8 @@ const resolvers = {
         notes:async ()=>{
             return await model.NoteModel.find();
         },
-        note:(parent,args)=>{
-            return notes.find(note=>note.id===args.id);
+        note: async (parent,args)=>{
+            return await model.NoteModel.findById({_id:args.id})
         }
 
     },
@@ -45,13 +46,20 @@ const resolvers = {
         CreateNote:async (parent,args)=>{
             return await model.NoteModel.create({
                 content:args.content,
-                author:"Kiran Raju"
+                author:args.author
             });
             
         },
         DeleteNote:async (parent,args)=>{
-            return await model.NoteModel.deleteOne({author:args.author})
+            return await model.NoteModel.findByIdAndDelete(args.id)
 
+        }
+        ,
+        UpdateNote:async (parent,args)=>{
+            return await model.NoteModel.findByIdAndUpdate(args.id,{
+                content:args.content,
+                author:args.author
+            });
         }
 
     }
