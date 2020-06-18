@@ -1,4 +1,6 @@
 const {gql} = require('apollo-server-express');
+const model = require('./models/index');
+
 
 let notes = [
     { id: '1', content: 'This is a note', author: 'Adam Scott' },
@@ -21,7 +23,7 @@ type Note {
 }
 type Mutation {
     CreateNote(content:String!):Note!
-    DeleteNote(id:ID!):Note!
+    DeleteNote(author:String!):Note!
 }
 
 `
@@ -31,27 +33,24 @@ type Mutation {
 
 const resolvers = {
     Query:{
-        notes:()=>notes,
+        notes:async ()=>{
+            return await model.NoteModel.find();
+        },
         note:(parent,args)=>{
             return notes.find(note=>note.id===args.id);
         }
 
     },
     Mutation:{
-        CreateNote:(parent,args)=>{
-            let newNote = {id:String(notes.length + 1),content:args.content,author:"Kiran Raju"};
-
-            notes.push(newNote)
-            return newNote
+        CreateNote:async (parent,args)=>{
+            return await model.NoteModel.create({
+                content:args.content,
+                author:"Kiran Raju"
+            });
+            
         },
-        DeleteNote:(parent,args)=>{
-            deleteNote = notes.find(note=>note.id===args.id)
-            notes = notes.filter(note=>{
-                if (note.id!==args.id){
-                    return note
-                }
-            })
-            return deleteNote
+        DeleteNote:async (parent,args)=>{
+            return await model.NoteModel.deleteOne({author:args.author})
 
         }
 
