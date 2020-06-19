@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const {ApolloServer,gql} = require('apollo-server-express');
-const {typeDefs,resolvers} = require('./schema');
+const typeDefs = require('./schema');
+const resolvers = require('./resolvers/index')
 require('dotenv').config();
 const db = require('./util/db');
 
