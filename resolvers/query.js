@@ -22,6 +22,10 @@ const queries = {
 
             return await models.UserModel.findById(user.id);
 
+        },
+        favorites:async(parent,args,{models,user})=>{
+            const User = await models.UserModel.findById(user.id)
+            return User.favorites
         }
 
     }

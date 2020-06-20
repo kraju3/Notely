@@ -8,6 +8,7 @@ const {
 } = require('apollo-server-express');
 
 const gravatar = require('../util/gravatar');
+const { model } = require('../models/users');
 require('dotenv').config()
 
 const saltRounds = 10;
@@ -118,6 +119,54 @@ const mutations = {
         },
         signIn:async(parent,args,{models})=>{
             return Authorization(args,models)
+        },
+        toggleFavorite:async(parent,{id},{models,user})=>{
+            if(!user){
+                throw new AuthenticationError("You need to be signed in")
+            }
+
+            const note = await models.NoteModel.findById(id)
+            const me = await models.UserModel.findById(user.id)
+            if(!note){
+                throw new Error("Note doesn't exist");
+            }
+
+            let checkFavorites = note.favoritedBy.find(user_id => String(user_id)===user.id);
+
+            if (checkFavorites===undefined){
+                await models.UserModel.findOneAndUpdate({_id:me._id},{
+                    $push:{
+                        favorites:note._id
+                    }
+                })
+                return await models.NoteModel.findOneAndUpdate({_id:id},{
+                    $push:{
+                        favoritedBy:me._id
+                    },
+                    $inc:{
+                        favoriteCount:1
+
+                    }
+                },{new:true});
+            }else{
+                await models.UserModel.findOneAndUpdate({_id:me._id},{
+                    $pull:{
+                        favorites:note._id
+                    }
+                })
+                return await models.NoteModel.findOneAndUpdate({_id:id},{
+                    $pull:{
+                       favoritedBy:me._id
+                    },
+                    $inc:{
+                        favoriteCount:-1
+                    }
+                },{new:true});
+
+            }
+
+
+
         }
 
     }

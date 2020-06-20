@@ -11,6 +11,7 @@ type Query{
     getUser(username:String!):User!
     users:[User!]!
     me:User!
+    favorites:[Note!]!
 
 }
 type User{
@@ -21,11 +22,14 @@ type User{
     username:String!
     avatar:String
     notes:[Note!]!
+    favorites:[Note!]!
 }
 type Note {
         id: ID!
         content:String!
-        author:String!
+        author:User!
+        favoriteCount:Int!
+        favoritedBy:[User!]
         createdAt:DateTime!
         updatedAt:DateTime!
       
@@ -36,6 +40,7 @@ type Mutation {
     UpdateNote(id:ID!,content:String!):Note!
     signUp(firstname:String!,lastname:String!,email:String!,username:String!,password:String!):String!
     signIn(username:String!,email:String,password:String!):String!
+    toggleFavorite(id:ID!):Note!
 }`
 
 

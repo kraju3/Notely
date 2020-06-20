@@ -8,7 +8,13 @@ const UserSchema = new mongoose.Schema({
     password:{type:String,required:[true,"Please provide a Password"]},
     avatar:{
         type: String
-    }
+    },
+    notes:[{
+        type:mongoose.Types.ObjectId,ref:'notes'
+    }],
+    favorites:[{
+        type:mongoose.Schema.Types.ObjectId,ref:'notes'
+    }]
 },{timestamps:true});
 
 const UserModel = mongoose.model('Users',UserSchema);
