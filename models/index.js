@@ -1,6 +1,8 @@
-const NoteModel = require('./notes')
+const NoteModel = require('./notes');
+const UserModel = require('./users')
 
 const models = {
-    NoteModel
+    NoteModel,
+    UserModel
 }
 module.exports = models;

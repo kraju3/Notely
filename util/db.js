@@ -7,7 +7,15 @@ module.exports = {
         mongoose.set('useCreateIndex',true)
         mongoose.set('useUnifiedTopology',true)
 
-        mongoose.connect(DB_HOST)
+        mongoose.connect(DB_HOST,(err)=>{
+            if (err){
+                throw err
+                process.exit();
+            }
+            else{
+                console.log("Successfully Connected to MongoDB")
+            }
+        })
 
         mongoose.connection.on('error',err =>{
             console.log(err)
