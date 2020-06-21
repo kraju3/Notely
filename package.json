@@ -4,7 +4,7 @@
   "description": "Social Note Application ",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "dev": "nodemon index.js",
     "final": "nodemon index.js",
     "seed": "node util/seed/index.js",

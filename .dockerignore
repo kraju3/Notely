@@ -1,0 +1,6 @@
+node_modules
+npm-debug.log
+.github
+README.md   
+.gitignore
+.eslintrcc.json
