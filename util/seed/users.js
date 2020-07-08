@@ -9,7 +9,6 @@ const gravatar = require('../gravatar');
 const seedUsers = async () => {
   console.log('Seeding users...');
   let users = [];
-
   // generate 10 user profiles
   for (var i = 0; i < 10; i++) {
     let user = {

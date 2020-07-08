@@ -8,7 +8,9 @@ const depthLimit = require('graphql-depth-limit');
 const {createComplexityLimitRule} = require('graphql-validation-complexity');
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+    credentials:true
+}));
 
 require('dotenv').config();
 const db = require('./util/db');

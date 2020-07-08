@@ -80,9 +80,10 @@ const mutations = {
             if(!user){
                 throw new AuthenticationError("You must be signed in to create a new Note");
             }
-                const note = models.NoteModel.findOneAndRemove({_id:id})
+                const note =  await models.NoteModel.findById({_id:id})
 
             if (note && String(note.author)!== user.id){
+                console.log(note.author)
                 throw new ForbiddenError("You do not have access to delete this note")
             }
             try{
